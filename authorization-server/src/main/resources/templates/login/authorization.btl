@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>add</title>
+</head>
+<body>
+<form action="" method="post">
+
+
+
+<%
+if(!has(autoApp)){
+%>
+申请的作用域范围：<br/>
+<%
+for(obj in scopes){
+%>
+       <input type="checkbox" name="scope" value="${obj}"/>${obj}<br/>
+<%
+}
+}
+%>
+
+
+<input type="text" name="username"/><br/>
+<input type="password" name="password"/><br/>
+<input type="submit" value="登录并授权"/>
+</form>
+
+</body>
+</html>
