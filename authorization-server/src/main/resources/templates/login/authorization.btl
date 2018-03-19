@@ -5,10 +5,45 @@
     <title>add</title>
 </head>
 <body>
-<form action="" method="post">
+
+<script type="text/javascript" src="../../js/jquery-1.10.2.js"></script>
+<script>
+$(function(){
+    $("#login").click(function(){
+        console.info($("input[type=checkbox]:checked").length);
+        var $checkArry=$("input[type=checkbox]:checked");
+        var arrayCh=new Array();
+        $checkArry.each(function(){
+            arrayCh.push($(this).val());
+        });
+        console.info(arrayCh);
+
+         $.ajax({
+             type : "POST",
+             url : "/page/code",
+             traditional:true,
+             data : {
+              "scopes" : arrayCh,
+              "username" : $("input[name=username]").val(),
+              "password" : $("input[name=password]").val(),
+              "clientId" : "${clientId}",
+              "state" : "${state}"
+             },
+             success : function(data) {
+                if(data&&data.success==true){
+                    location.href=data.redirectUrl+"?code="+data.code+"&state="+data.state;
+                }else{
+                    alert(data.msg);
+                }
+             }
+          });
 
 
+    });
 
+});
+
+</script>
 <%
 if(!has(autoApp)){
 %>
@@ -16,7 +51,7 @@ if(!has(autoApp)){
 <%
 for(obj in scopes){
 %>
-       <input type="checkbox" name="scope" value="${obj}"/>${obj}<br/>
+       <input type="checkbox" name="scopes" value="${obj}"/>${obj}<br/>
 <%
 }
 }
@@ -25,8 +60,7 @@ for(obj in scopes){
 
 <input type="text" name="username"/><br/>
 <input type="password" name="password"/><br/>
-<input type="submit" value="登录并授权"/>
-</form>
+<input id="login" type="button" value="登录并授权"/>
 
 </body>
 </html>

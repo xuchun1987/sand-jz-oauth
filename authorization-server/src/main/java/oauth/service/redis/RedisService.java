@@ -138,6 +138,34 @@ public class RedisService {
 	}
 
 	/**
+	 * 放入hash键值
+	 * xuchun
+	 * 2017-06-26
+	 * @param key
+	 * @param field
+	 * @param value
+	 */
+	public Boolean hSet(String key,String field,String value,long l){
+
+		RedisConnection con=null;
+		Boolean b=null;
+		try{
+			con=redisTemplate.getConnectionFactory().getConnection();
+			b=con.hSet(key.getBytes(),field.getBytes(),value.getBytes());
+			redisTemplate.expire(key,l,TimeUnit.MILLISECONDS);
+		}catch (Exception e){
+			logger.info("--------redis hset异常-----key:"+key+"----field:"+field+"------value:"+value,e);
+			b=false;
+		}finally {
+			if(con!=null){
+				con.close();
+			}
+		}
+		return b;
+
+	}
+
+	/**
 	 * 如果reids中没有该key，
 	 * 设值成功返回true；
 	 * 否则不操作返回false
@@ -147,10 +175,21 @@ public class RedisService {
 	 * @return
 	 */
 	public Boolean setNx(String key,String value,long l){
-		RedisConnection con=redisTemplate.getConnectionFactory().getConnection();
-		Boolean b=con.setNX(key.getBytes(),value.getBytes());
-		redisTemplate.expire(key,l,TimeUnit.MILLISECONDS);
-		con.close();
+		RedisConnection con=null;
+		Boolean b= null;
+		try {
+			redisTemplate.getConnectionFactory().getConnection();
+			b = con.setNX(key.getBytes(),value.getBytes());
+			con.expireAt(key.getBytes(),l);
+		} catch (Exception e) {
+			logger.error("error:"+e);
+			return false;
+		} finally {
+			if(con!=null){
+				con.close();
+			}
+		}
+
 		return b;
 
 	}
@@ -222,6 +261,34 @@ public class RedisService {
 	}
 
 
+
+	/**
+	 * 放入hash键值
+	 * xuchun
+	 * 2017-06-26
+	 * @param key
+	 * @param field
+	 * @param value
+	 */
+	public Boolean hSetNx(String key,String field,String value,Long l){
+
+		RedisConnection con=null;
+		Boolean b=null;
+		try{
+			con=redisTemplate.getConnectionFactory().getConnection();
+			b=con.hSetNX(key.getBytes(),field.getBytes(),value.getBytes());
+			con.expireAt(key.getBytes(),l);
+		}catch (Exception e){
+			logger.info("--------redis hset异常-----key:"+key+"----field:"+field+"------value:"+value,e);
+			b=false;
+		}finally {
+			if(con!=null){
+				con.close();
+			}
+		}
+		return b;
+
+	}
 	/**
 	 * 放入hash键值
 	 * xuchun
@@ -296,6 +363,21 @@ public class RedisService {
 		con.close();
 		return b;
 	}
+
+	/*public void incrExp(String key,long date){
+		RedisConnection con=null;
+		try {
+			con=redisTemplate.getConnectionFactory().getConnection();
+			Long a=con.incr(key.getBytes());
+			if
+		} catch (Exception e) {
+			logger.error("error:",e);
+		} finally {
+			if(con!=null){
+				con.close();
+			}
+		}
+	}*/
 
 	/**
 	 * hash删除

@@ -12,6 +12,7 @@ public class Authorize {
 
     private String scope;
 
+    @NotEmpty(message="state不能为空")
     private String state;
 
     @NotEmpty(message="redirect_uri不能为空")

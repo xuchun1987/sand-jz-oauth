@@ -3,7 +3,11 @@ package oauth.entity;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;
+
+import java.beans.Transient;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -43,6 +47,12 @@ public class OauthClientInfo implements Serializable {
      */
 	@TableField("redirect_uri")
 	private String redirectUri;
+	/**
+	 * 授权回跳URI
+	 */
+	@TableField("reback_uri")
+	private String rebackUri;
+
     /**
      * 过期时间
      */
@@ -61,8 +71,52 @@ public class OauthClientInfo implements Serializable {
     /**
      * 状态
      */
+	@TableField("status")
 	private String status;
 
+
+	/**
+	 * 用于缓存提交的回调地址
+	 */
+	@TableField(exist = false)
+	private String cacheRedirectUrl;
+
+	/**
+	 * 用于缓存提交的授权
+	 */
+	@TableField(exist = false)
+	private String[] cacheScopes;
+
+
+	/**
+	 * 用于缓存提交的userId
+	 */
+	@TableField(exist = false)
+	private String userId;
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String getCacheRedirectUrl() {
+		return cacheRedirectUrl;
+	}
+
+	public void setCacheRedirectUrl(String cacheRedirectUrl) {
+		this.cacheRedirectUrl = cacheRedirectUrl;
+	}
+
+	public String[] getCacheScopes() {
+		return cacheScopes;
+	}
+
+	public void setCacheScopes(String[] cacheScopes) {
+		this.cacheScopes = cacheScopes;
+	}
 
 	public String getClientId() {
 		return clientId;
@@ -136,6 +190,14 @@ public class OauthClientInfo implements Serializable {
 		this.status = status;
 	}
 
+	public String getRebackUri() {
+		return rebackUri;
+	}
+
+	public void setRebackUri(String rebackUri) {
+		this.rebackUri = rebackUri;
+	}
+
 	@Override
 	public String toString() {
 		return "OauthClientInfo{" +
@@ -144,6 +206,7 @@ public class OauthClientInfo implements Serializable {
 			", clientName=" + clientName +
 			", grantType=" + grantType +
 			", redirectUri=" + redirectUri +
+			", rebackUri=" + rebackUri +
 			", accessTokenValidity=" + accessTokenValidity +
 			", refreshTokenValidity=" + refreshTokenValidity +
 			", autoApprove=" + autoApprove +

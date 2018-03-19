@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>add</title>
+</head>
+<body>
+
+
+<script>
+<%
+if(!has(rebackUrl)){
+%>
+location.href=rebackUrl;
+<%
+}
+%>
+</script>
+
+</body>
+</html>
